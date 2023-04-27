@@ -229,7 +229,6 @@ int main()
         const char *new_json_str = json_object_to_json_string(object);
         printf("the final is resultat is \n");
         printf("%s\n", new_json_str);
-        free(new_json_str);
 #endif
         write_json_to_tlv_file(object, output_file_json);
         json_object_put(object);
