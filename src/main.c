@@ -190,30 +190,49 @@ int main()
             const char *old_key = apr_hash_this_key(hi);
             int32_t *new_key = apr_hash_this_val(hi);
             // Check if the old key exists in the JSON object
-            if (json_object_object_get(object, old_key) != NULL)
+            
+            json_object *value = json_object_object_get(object, old_key);
+
+            if (value != NULL)
             {
-                // Get the value associated with the old key
-                json_object *value = json_object_object_get(object, old_key);
-                // Remove the old key from the JSON object
-                json_object_object_del(object, old_key);
-                // Add the new key and value to the JSON object
+
                 char str[MAX_KEY_LENGTH];
                 sprintf(str, "%d", new_key);
-                json_object_object_add(object, str, value);
+
+                json_type value_type = json_object_get_type(value);
+                if (value_type == json_type_null) {
+                    
+                continue;
+                    
+                } else if (value_type == json_type_boolean) {
+                    
+                json_object_object_add(object, str, json_object_new_boolean( json_object_get_boolean(value)));
+
+                } else if (value_type == json_type_int) {
+                 
+                json_object_object_add(object, str, json_object_new_int( json_object_get_int(value)));
+               
+                } else if (value_type == json_type_string) {
+               
+                 json_object_object_add(object, str, json_object_new_string( json_object_get_string(value)));
+                
+                }
+                // Remove the old key from the JSON object
+                json_object_object_del(object, old_key);
+
             }
         }
 
+
+#ifdef DEBUG_MODE
         // Serialize the JSON object to a string
         const char *new_json_str = json_object_to_json_string(object);
-#ifdef DEBUG_MODE
         printf("the final is resultat is \n");
         printf("%s\n", new_json_str);
+        free(new_json_str);
 #endif
-        // ReParse the JSON string to write to file
-        json_object *new_json_object = json_tokener_parse(new_json_str);
-
-        write_json_to_tlv_file(new_json_object, output_file_json);
-        json_object_put(new_json_object);
+        write_json_to_tlv_file(object, output_file_json);
+        json_object_put(object);
     }
 
     // Open output file for writing
