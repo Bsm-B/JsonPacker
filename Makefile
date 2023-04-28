@@ -6,7 +6,7 @@ LIBS-TEST = -lcunit
 SRC_DIR = src
 TEST_DIR = test
 BUILD_DIR = build
-
+ASSETS = assets
 SRCS = $(wildcard $(SRC_DIR)/*.c)
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 TEST_SRCS = $(wildcard $(TEST_DIR)/*.c)
