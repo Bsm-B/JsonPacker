@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -pedantic -std=c99
+CFLAGS = -g -Wall -Wextra -pedantic -std=c99
 LIBS = -lapr-1 -ljson-c
 LIBS-TEST = -lcunit
 
@@ -26,6 +26,7 @@ $(TARGET): $(OBJS)
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c -o $@ $<
+	@cp $(ASSETS)/input.json $(BUILD_DIR)
 
 test: $(TEST_TARGET)
 	./$(TEST_TARGET)
