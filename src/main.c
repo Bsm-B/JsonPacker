@@ -175,9 +175,7 @@ int main()
             {
                 // Add new entry to dictionary
                 entry = apr_palloc(pool, sizeof(DictionaryEntry));
-                entry->key = (char *)malloc(strlen(key) + 1);
-                strcpy(entry->key, key);
-                // entry->key = apr_pstrdup(pool, key);
+                entry->key = apr_pstrdup(pool, key);
                 entry->value = next_key;
                 apr_hash_set(dictionary, entry->key, APR_HASH_KEY_STRING, entry->value);
                 next_key++;
